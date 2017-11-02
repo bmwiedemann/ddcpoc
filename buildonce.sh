@@ -8,3 +8,5 @@ cd $dir
 ./configure --cc=${CC:-gcc} --prefix=$prefix
 make -j4
 make install
+echo -n md5:
+md5sum tcc libtcc*.a
