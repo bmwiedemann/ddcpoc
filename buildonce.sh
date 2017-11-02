@@ -1,9 +1,9 @@
 #!/bin/sh
-tar=tcc-0.9.26.tar.bz2
-dir=tcc-0.9.26
+dir=tcc-build
 prefix=$PWD/tcc.$run
+test -e tinycc || git clone git://repo.or.cz/tinycc.git
 rm -rf "$dir"
-tar xf $tar
+cp -a tinycc $dir
 cd $dir
 ./configure --cc=${CC:-gcc} --prefix=$prefix
 make -j4
