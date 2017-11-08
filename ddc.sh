@@ -17,10 +17,20 @@ done
 
 echo >&2 "DDC finished, comparing..."
 
+x=0
 for cc in $compilers; do
-	checkdiff "build-cc-2" "build-$cc-2" \
-	"DDC verified $cc against cc."
+	if checkdiff "build-cc-2" "build-$cc-2" "DDC verified $cc against cc."; then
+		:
+	else
+		x=$?
+		echo >&2 "DDC failed for $cc..."
+		echo >&2 "Try running \`CC=$cc ./doublecompile.sh -3\` to check for bugs."
+		echo >&2 "If it reaches a fixed-point, then it's more likely that it is *not* buggy and"
+		echo >&2 "is intentionally backdoored. (OTOH, if it does not reach a fixed-point, it "
+		echo >&2 "may be buggy/nondeterministic *and* backdoored.)"
+	fi
 done
+test x = 0 || exit $x
 
 echo >&2 "DDC complete; verified all of: $compiler0 $compilers."
 echo >&2 "Either these are all not backdoored, or they are all backdoored in exactly the same way."
