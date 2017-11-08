@@ -23,8 +23,8 @@ prefix="$PWD/tcc-root" # constant prefix for now
 buildprefix="${1:-build}"
 
 if [ -z "$CC" ]; then
-	echo >&2 "setting CC=gcc"
-	export CC=gcc
+	echo >&2 "setting CC=cc"
+	export CC=cc
 fi
 
 ./buildonce.sh "$prefix" "$buildprefix-1"
