@@ -1,13 +1,19 @@
-#!/bin/sh
-dir=tcc-build
-prefix=$PWD/tcc.$run
+#!/bin/sh -e
+
+builddir=tcc-build # constant build path for now
+
+prefix="$1"
+destdir="$2"
+test -n "$destdir"
 test -e tinycc || git clone git://repo.or.cz/tinycc.git
-rm -rf "$dir"
-cp -a tinycc $dir
-cd $dir
-./configure --cc=${CC:-gcc} --prefix=$prefix
+
+rm -rf "$builddir" && mkdir -p "$builddir"
+rm -rf "$destdir" # directory will be created later by the last "mv"
+
+base="$PWD"
+cd "$builddir"
+
+../tinycc/configure --cc="${CC:-gcc}" --prefix="$prefix"
 make -j4
-strip-nondeterminism libtcc.a # drop timestamps
-make install
-echo -n md5:
-md5sum tcc libtcc*.a
+make install DESTDIR="$destdir"
+mv "$base/$builddir/$destdir/$prefix" "$base/$destdir"
