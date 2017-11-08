@@ -13,7 +13,7 @@ rm -rf "$destdir" # directory will be created later by the last "mv"
 base="$PWD"
 cd "$builddir"
 
-../tinycc/configure --cc="${CC:-gcc}" --prefix="$prefix"
+../tinycc/configure --cc="$CC" --extra-cflags="$CFLAGS" --extra-ldflags="$LDFLAGS" --prefix="$prefix"
 make -j4
 make install DESTDIR="$destdir"
 mv "$base/$builddir/$destdir/$prefix" "$base/$destdir"

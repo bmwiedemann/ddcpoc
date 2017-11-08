@@ -7,7 +7,14 @@
 
 prefix="$PWD/tcc-root" # constant prefix for now
 
+if [ -z "$CC" ]; then
+	echo >&2 "setting CC=gcc"
+	export CC=gcc
+fi
+
 ./buildonce.sh "$prefix" build-0
+
+unset CC CFLAGS LDFLAGS
 
 ln -sfT build-0 "$prefix"
 CC="$prefix/bin/tcc" ./buildonce.sh "$prefix" build-1
