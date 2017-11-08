@@ -29,9 +29,11 @@ echo >&2 "Either these are all not backdoored, or they are all backdoored in exa
 echo "-- Build path:"
 echo "$PWD"
 echo "-- Linked libraries:"
-ldd -r build-cc-2/bin/tcc | sed -nre 's/.* => (.*) \(.*\)/\1/gp' | xargs -rn1 sha256sum
+for cc in $compiler0 $compilers; do ldd -r build-$cc-2/bin/tcc | sed -nre 's/.* => (.*) \(.*\)/\1/gp'; done | \
+	sort -u | xargs -rn1 sha256sum
 echo "-- System headers:"
-for cc in $compiler0 $compilers; do cat build-$cc-2/used_system_headers; done | sort -u | xargs -rn1 sha256sum
+for cc in $compiler0 $compilers; do cat build-$cc-2/used_system_headers; done | \
+	sort -u | xargs -rn1 sha256sum
 } > dependencies.txt
 
 cat >&2 <<eof
