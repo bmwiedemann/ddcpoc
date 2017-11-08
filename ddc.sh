@@ -16,6 +16,8 @@ for cc in $compiler0 $compilers; do
 done
 
 {
+echo "-- Source code:"
+GIT_DIR=tinycc/.git git rev-parse @
 echo "-- Build path:"
 echo "$PWD"
 echo "-- Linked libraries:"
