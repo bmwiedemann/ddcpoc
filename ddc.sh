@@ -15,6 +15,17 @@ for cc in $compiler0 $compilers; do
 	dc $cc
 done
 
+{
+echo "-- Build path:"
+echo "$PWD"
+echo "-- Linked libraries:"
+for cc in $compiler0 $compilers; do ldd -r build-$cc-2/bin/tcc | sed -nre 's/.* => (.*) \(.*\)/\1/gp'; done | \
+	sort -u | xargs -rn1 sha256sum
+echo "-- System headers:"
+for cc in $compiler0 $compilers; do cat build-$cc-2/used_system_headers; rm -f build-$cc-2/used_*headers; done | \
+	sort -u | xargs -rn1 sha256sum
+} > dependencies.txt
+
 echo >&2 "DDC finished, comparing..."
 
 x=0
@@ -30,21 +41,12 @@ for cc in $compilers; do
 		echo >&2 "may be buggy/nondeterministic *and* backdoored.)"
 	fi
 done
-test x = 0 || exit $x
+test $x = 0 || exit $x
+
+sums build-cc-2
 
 echo >&2 "DDC complete; verified all of: $compiler0 $compilers."
 echo >&2 "Either these are all not backdoored, or they are all backdoored in exactly the same way."
-
-{
-echo "-- Build path:"
-echo "$PWD"
-echo "-- Linked libraries:"
-for cc in $compiler0 $compilers; do ldd -r build-$cc-2/bin/tcc | sed -nre 's/.* => (.*) \(.*\)/\1/gp'; done | \
-	sort -u | xargs -rn1 sha256sum
-echo "-- System headers:"
-for cc in $compiler0 $compilers; do cat build-$cc-2/used_system_headers; done | \
-	sort -u | xargs -rn1 sha256sum
-} > dependencies.txt
 
 cat >&2 <<eof
 Your artifact hashes may dependent on some system-specific things, see
