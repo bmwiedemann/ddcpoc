@@ -1,3 +1,28 @@
 - make the results independent of build-path
 - make the results independent of libc, or as independent as possible
 - set different CFLAGS for the same compiler
+
+- use ICC which one can get as freeware on intel's website
+
+Perhaps use the following:
+
+Old school
+- https://github.com/davidgiven/ack
+- http://pcc.ludd.ltu.se/downloads/
+
+Newer
+- https://github.com/rui314/8cc
+- https://pp.ipd.kit.edu/git/cparser/
+- https://github.com/Fedjmike/fcc
+- https://github.com/drh/lcc
+- https://repo.or.cz/w/neatcc.git
+- https://sourceforge.net/projects/nwcc/files/
+- https://github.com/k0gaMSX/scc
+- https://github.com/alexfru/SmallerC
+- https://github.com/bobrippling/ucc-c-compiler
+
+Unfortunately most of these don't seem to provide binary releases, so we'd
+have to build them using GCC anyway. This may still have some security benefit -
+it would test the sophistication of any backdoors in GCC, since they'd have to
+be able to insert themselves into all of these - but it's not obvious how to
+quantify the amount of security benefit we do gain; it may be negligible.
