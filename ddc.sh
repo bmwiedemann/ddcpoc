@@ -23,3 +23,19 @@ for cc in $compilers; do
 done
 
 echo >&2 "DDC complete; verified all of: $compiler0 $compilers."
+echo >&2 "Either these are all not backdoored, or they are all backdoored in exactly the same way."
+
+{
+echo "-- Build path:"
+echo "$PWD"
+echo "-- Linked libraries:"
+ldd -r build-cc-2/bin/tcc | sed -nre 's/.* => (.*) \(.*\)/\1/gp' | xargs -rn1 sha256sum
+echo "-- System headers:"
+for cc in $compiler0 $compilers; do cat build-$cc-2/used_system_headers; done | sort -u | xargs -rn1 sha256sum
+} > dependencies.txt
+
+cat >&2 <<eof
+Your artifact hashes may dependent on some system-specific things, see
+dependencies.txt for details. For best results, re-run this on a different
+system where the dependencies are different, and try to get the same hashes.
+eof

@@ -17,3 +17,15 @@ cd "$builddir"
 make -j4
 make install DESTDIR="$destdir"
 mv "$base/$builddir/$destdir/$prefix" "$base/$destdir"
+
+# Guess which system headers were used
+c_files=$(grep -lr --exclude-dir=tests --exclude-dir=win32 --exclude-dir=examples '# *include <.*>' ../tinycc)
+# not all compilers support the -M or -MM option, use GCC if it doesn't
+if ${CC:-cc} -M /dev/null; then
+	CCM=$CC
+else
+	CCM=gcc
+fi
+$CCM -I"$PWD" -M -MP $c_files | sed -ne 's/:$//p' | sort -u > "$base/$destdir/used_headers"
+$CCM -I"$PWD" -MM -MP $c_files | sed -ne 's/:$//p' | sort -u > "$base/$destdir/used_user_headers"
+comm -23 "$base/$destdir/used_headers" "$base/$destdir/used_user_headers" > "$base/$destdir/used_system_headers"
