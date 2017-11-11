@@ -1,5 +1,5 @@
 #!/bin/sh -e
-# DDC tinycc with gcc and clang-4.0
+# DDC tinycc with gcc and whatever else we can detect
 #
 
 . "$(dirname "$(readlink -f "$0")")/functions.sh"
@@ -21,7 +21,8 @@ cenv() {
 compiler0="cc"
 
 if [ -z "$compilers" ]; then
-	compilers="gcc clang-4.0"
+	compilers="gcc"
+	which clang >/dev/null 2>&1 && compilers="$compilers clang"
 	which icc >/dev/null 2>&1 && compilers="$compilers icc"
 	which pgcc >/dev/null 2>&1 && compilers="$compilers pgcc"
 fi

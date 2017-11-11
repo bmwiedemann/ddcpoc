@@ -9,5 +9,8 @@ This git repo is about doing a DDC POC - a proof-of-concept of a diverse double 
 `ddc.sh` will automatically pick up the following compilers on your PATH and
 test them:
 
+cc              Whatever your system default is
+gcc             You know where to get this
+clang           You know where to get this
 icc             https://software.intel.com/en-us/parallel-studio-xe/choose-download/open-source-contributor
 pgcc            https://www.pgroup.com/products/community.htm
