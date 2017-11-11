@@ -5,11 +5,28 @@
 . "$(dirname "$(readlink -f "$0")")/functions.sh"
 
 dc() {
-	CC="$1" ./doublecompile.sh build-"$1"
+	set -x
+	eval $(cenv $1) ./doublecompile.sh build-"$1"
+	{ set +x; } 2>/dev/null
+}
+
+cenv() {
+	if [ -f "$1.cflags" ]; then
+		echo CC=\"$1\" CFLAGS=\"$(cat $1.cflags)\"
+	else
+		echo CC=\"$1\"
+	fi
 }
 
 compiler0="cc"
-compilers="gcc clang-4.0"
+
+if [ -z "$compilers" ]; then
+	compilers="gcc clang-4.0"
+	which icc >/dev/null 2>&1 && compilers="$compilers icc"
+	which pgcc >/dev/null 2>&1 && compilers="$compilers pgcc"
+fi
+
+echo >&2 "DDC verifying these compilers: $compiler0 $compilers"
 
 for cc in $compiler0 $compilers; do
 	dc $cc
@@ -37,7 +54,7 @@ for cc in $compilers; do
 	else
 		x=$?
 		echo >&2 "DDC failed for $cc..."
-		echo >&2 "Try running \`CC=$cc ./doublecompile.sh -3\` to check for bugs."
+		echo >&2 "Try running \`$(cenv $cc) ./doublecompile.sh -3\` to check for bugs."
 		echo >&2 "If it reaches a fixed-point, then it's more likely that it is *not* buggy and"
 		echo >&2 "is intentionally backdoored. (OTOH, if it does not reach a fixed-point, it "
 		echo >&2 "may be buggy/nondeterministic *and* backdoored.)"

@@ -2,9 +2,7 @@
 - make the results independent of libc, or as independent as possible
 - set different CFLAGS for the same compiler
 
-- use ICC which one can get as freeware on intel's website
-
-Perhaps use the following:
+Add support for using the following:
 
 Old school
 - https://github.com/davidgiven/ack
