@@ -22,9 +22,9 @@ compiler0="cc"
 
 if [ -z "$compilers" ]; then
 	compilers="gcc"
-	which clang >/dev/null 2>&1 && compilers="$compilers clang"
-	which icc >/dev/null 2>&1 && compilers="$compilers icc"
-	which pgcc >/dev/null 2>&1 && compilers="$compilers pgcc"
+	for c in clang icc pgcc ; do
+		which $c >/dev/null 2>&1 && compilers="$compilers $c"
+	done
 fi
 
 echo >&2 "DDC verifying these compilers: $compiler0 $compilers"
