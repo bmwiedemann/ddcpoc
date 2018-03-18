@@ -15,6 +15,7 @@ cd "$builddir"
 
 ../tinycc/configure --cc="$CC" --extra-cflags="$CFLAGS" --extra-ldflags="$LDFLAGS" --prefix="$prefix"
 make -j4
+objcopy -D libtcc.a # because not everyone patches their binutils to have 'ar -D' as default
 make install DESTDIR="$destdir"
 mv "$base/$builddir/$destdir/$prefix" "$base/$destdir"
 
