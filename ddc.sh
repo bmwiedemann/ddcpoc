@@ -70,7 +70,7 @@ echo >&2 "DDC complete; verified all of: $compiler0 $compilers."
 echo >&2 "Either these are all not backdoored, or they are all backdoored in exactly the same way."
 
 cat >&2 <<eof
-Your artifact hashes may dependent on some system-specific things, see
+Your artifact hashes may depend on some system-specific things, see
 dependencies.txt for details. For best results, re-run this on a different
 system where the dependencies are different, and try to get the same hashes.
 eof
